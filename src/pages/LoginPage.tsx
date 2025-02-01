@@ -8,11 +8,18 @@ import { AxiosError } from "axios";
 
 export  function LoginPage() {
   const navigate = useNavigate();
-  const { setUser } = useAuth();
+  const { setUser, isLoggedIn } = useAuth(); // Add isLoggedIn check
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  // Redirect if already logged in
+  React.useEffect(() => {
+    if (isLoggedIn) {
+      navigate("/translator");
+    }
+  }, [isLoggedIn, navigate]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,34 +27,33 @@ export  function LoginPage() {
 
     try {
       const response = await loginUser({ email, password });
-      // response: { message, token, user }
-      // Zapis tokena do localStorage
+      
+      // Save auth data
       saveToken(response.token);
-      // Zapis usera do localStorage
       saveCurrentUser(response.user);
-      // Ustaw kontekst
       setUser(response.user);
-
-      // Sprawdź rolę
-      if (response.user.role === "admin") {
-        navigate("/admin-dashboard");
+      window.location.href = response.user.role === 'admin' ? '/admin' : '/translator';
+      // Redirect based on role
+      if (response.user.role === 'admin') {
+        navigate("/admin");
       } else {
         navigate("/translator");
       }
-    }catch (error: unknown) {
-        if (error instanceof AxiosError) {
-          if (error.response?.status === 400) {
-            setErrorMessage("Invalid email or password.");
-          } else if (error.response?.status === 500) {
-            setErrorMessage("Server error. Please try again later.");
-          } else {
-            setErrorMessage("Something went wrong. Please try again.");
-          }
+
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        if (error.response?.status === 400) {
+          setErrorMessage("Invalid email or password.");
+        } else if (error.response?.status === 500) {
+          setErrorMessage("Server error. Please try again later.");
         } else {
-          console.error("Unexpected error:", error);
           setErrorMessage("Something went wrong. Please try again.");
         }
+      } else {
+        console.error("Unexpected error:", error);
+        setErrorMessage("Something went wrong. Please try again.");
       }
+    }
   };
 
   return (

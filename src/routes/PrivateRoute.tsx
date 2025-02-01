@@ -9,12 +9,12 @@ interface PrivateRouteProps {
 }
 
 export function PrivateRoute({ children, requiredRole }: PrivateRouteProps) {
-  const { isLoggedIn, user } = useAuth();
+  const { user } = useAuth();
 
-  if (!isLoggedIn) {
-    // Jeżeli użytkownik nie jest zalogowany => przekieruj na /login
-    return <Navigate to="/login" replace />;
-  }
+  // if (!isLoggedIn) {
+  //   // Jeżeli użytkownik nie jest zalogowany => przekieruj na /login
+  //   return <Navigate to="/login" replace />;
+  // }
 
   // Jeśli trasa wymaga roli (np. 'admin'), a user jej nie ma => brak dostępu
   if (requiredRole && user?.role !== requiredRole) {
