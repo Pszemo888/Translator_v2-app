@@ -13,8 +13,8 @@ export default function TranslatorPage() {
   const [sourceLanguage, setSourceLanguage] = useState("");
   const [targetLanguage, setTargetLanguage] = useState("");
   const [translatedText, setTranslatedText] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
-  // Ładujemy listę języków przy starcie
   useEffect(() => {
     (async () => {
       try {
@@ -28,36 +28,42 @@ export default function TranslatorPage() {
 
   const handleTranslate = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
+    setTranslatedText("");
+
     if (!sourceText || !sourceLanguage || !targetLanguage) {
-      alert("Please select languages and enter some text to translate.");
+      setError("Wprowadź wszystkie wymagane dane.");
       return;
     }
 
     try {
       const response: TranslationResponse = await translateText({
-        sourceText,
+        sourceText: sourceText.trim(),
         sourceLanguage,
         targetLanguage,
       });
       setTranslatedText(response.translatedText);
-    } catch (err) {
+    } catch (err: any) {
       console.error("Translation error:", err);
-      alert("Translation failed. Please try again.");
+      if (err.response?.status === 404) {
+        setError("Tłumaczenie nie zostało znalezione.");
+      } else {
+        setError("Wystąpił błąd podczas tłumaczenia.");
+      }
     }
   };
 
   return (
     <div className="translator-container">
-      <h2>Translation Panel</h2>
+      <h2>Panel tłumaczeń</h2>
       <form onSubmit={handleTranslate}>
         <div>
-          <label>Source Language</label>
-          <br />
+          <label>Język źródłowy</label>
           <select
             value={sourceLanguage}
             onChange={(e) => setSourceLanguage(e.target.value)}
           >
-            <option value="">-- Select Source --</option>
+            <option value="">-- Wybierz język źródłowy --</option>
             {languages.map((lang) => (
               <option key={lang.code} value={lang.code}>
                 {lang.name} ({lang.nativeName})
@@ -67,13 +73,12 @@ export default function TranslatorPage() {
         </div>
 
         <div>
-          <label>Target Language</label>
-          <br />
+          <label>Język docelowy</label>
           <select
             value={targetLanguage}
             onChange={(e) => setTargetLanguage(e.target.value)}
           >
-            <option value="">-- Select Target --</option>
+            <option value="">-- Wybierz język docelowy --</option>
             {languages.map((lang) => (
               <option key={lang.code} value={lang.code}>
                 {lang.name} ({lang.nativeName})
@@ -83,8 +88,7 @@ export default function TranslatorPage() {
         </div>
 
         <div>
-          <label>Source Text</label>
-          <br />
+          <label>Tekst źródłowy</label>
           <textarea
             rows={4}
             cols={50}
@@ -93,12 +97,14 @@ export default function TranslatorPage() {
           />
         </div>
 
-        <button type="submit">Translate</button>
+        <button type="submit">Tłumacz</button>
       </form>
+
+      {error && <p style={{ color: "red" }}>{error}</p>}
 
       {translatedText && (
         <div style={{ marginTop: "1rem" }}>
-          <h3>Translated Text:</h3>
+          <h3>Przetłumaczony tekst:</h3>
           <p>{translatedText}</p>
         </div>
       )}
