@@ -1,11 +1,6 @@
-// src/pages/TranslatorPage.tsx
 import React, { useEffect, useState } from "react";
-import {
-  getLanguages,
-  translateText,
-  LanguageResponse,
-  TranslationResponse,
-} from "../services/translationService";
+import "../styles/TranslatorPage.css";
+import { getLanguages, translateText, LanguageResponse, TranslationResponse } from "../services/translationService";
 
 export default function TranslatorPage() {
   const [languages, setLanguages] = useState<LanguageResponse[]>([]);
@@ -32,7 +27,7 @@ export default function TranslatorPage() {
     setTranslatedText("");
 
     if (!sourceText || !sourceLanguage || !targetLanguage) {
-      setError("Wprowadź wszystkie wymagane dane.");
+      setError("Please fill in all fields.");
       return;
     }
 
@@ -43,71 +38,84 @@ export default function TranslatorPage() {
         targetLanguage,
       });
       setTranslatedText(response.translatedText);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Translation error:", err);
-      if (err.response?.status === 404) {
-        setError("Tłumaczenie nie zostało znalezione.");
-      } else {
-        setError("Wystąpił błąd podczas tłumaczenia.");
-      }
+      setError("An error occurred while translating.");
     }
   };
 
   return (
-    <div className="translator-container">
-      <h2>Panel tłumaczeń</h2>
-      <form onSubmit={handleTranslate}>
-        <div>
-          <label>Język źródłowy</label>
-          <select
-            value={sourceLanguage}
-            onChange={(e) => setSourceLanguage(e.target.value)}
-          >
-            <option value="">-- Wybierz język źródłowy --</option>
-            {languages.map((lang) => (
-              <option key={lang.code} value={lang.code}>
-                {lang.name} ({lang.nativeName})
-              </option>
-            ))}
-          </select>
-        </div>
+    <div className="translator-page">
+      <div className="translator-container">
+        <h2 className="translator-header">Translate text</h2>
+        <form onSubmit={handleTranslate} className="translator-form">
+          <div className="language-selector">
+            <div className="language-group">
+              <label className="form-label">Source Language</label>
+              <select
+                className="form-select"
+                value={sourceLanguage}
+                onChange={(e) => setSourceLanguage(e.target.value)}
+              >
+                <option value="">Language</option>
+                {languages.map((lang) => (
+                  <option key={lang.code} value={lang.code}>
+                    {lang.name}
+                  </option>
+                ))}
+              </select>
+              <textarea
+                className="form-textarea"
+                rows={6}
+                value={sourceText}
+                onChange={(e) => setSourceText(e.target.value)}
+                placeholder="Type text to translate"
+              />
+            </div>
+            <div className="swap-button-container">
+              <button
+                type="button"
+                className="swap-button"
+                onClick={() => {
+                  setSourceLanguage(targetLanguage);
+                  setTargetLanguage(sourceLanguage);
+                  setSourceText(translatedText);
+                  setTranslatedText("");
+                }}
+              >
+                &#x21c6;
+              </button>
+            </div>
+            <div className="language-group">
+              <label className="form-label">Target Language</label>
+              <select
+                className="form-select"
+                value={targetLanguage}
+                onChange={(e) => setTargetLanguage(e.target.value)}
+              >
+                <option value="">Language</option>
+                {languages.map((lang) => (
+                  <option key={lang.code} value={lang.code}>
+                    {lang.name}
+                  </option>
+                ))}
+              </select>
+              <textarea
+                className="form-textarea"
+                rows={6}
+                value={translatedText}
+                readOnly
+                placeholder="Translation will appear here"
+              />
+            </div>
+          </div>
+          <button className="form-button" type="submit">
+            Translate
+          </button>
+        </form>
 
-        <div>
-          <label>Język docelowy</label>
-          <select
-            value={targetLanguage}
-            onChange={(e) => setTargetLanguage(e.target.value)}
-          >
-            <option value="">-- Wybierz język docelowy --</option>
-            {languages.map((lang) => (
-              <option key={lang.code} value={lang.code}>
-                {lang.name} ({lang.nativeName})
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div>
-          <label>Tekst źródłowy</label>
-          <textarea
-            rows={4}
-            cols={50}
-            value={sourceText}
-            onChange={(e) => setSourceText(e.target.value)}
-          />
-        </div>
-
-        <button type="submit">Tłumacz</button>
-      </form>
-
-      {error && <p style={{ color: "red" }}>{error}</p>}
-
-      {translatedText && (
-        <div style={{ marginTop: "1rem" }}>
-          <h3>Przetłumaczony tekst:</h3>
-          <p>{translatedText}</p>
-        </div>
-      )}
+        {error && <p className="error-message">{error}</p>}
+      </div>
     </div>
   );
 }

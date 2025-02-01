@@ -16,11 +16,12 @@ const NavBar: React.FC = () => {
   return (
     <nav style={{ display: "flex", gap: "1rem", background: "#eee", padding: "10px" }}>
       <Link to="/" style={{ textDecoration: "none", color: "blue" }}>Home</Link>
-      <Link to="/translator" style={{ textDecoration: "none", color: "blue" }}>Translator</Link>
+      <Link to="/translator" style={{ textDecoration: "none", color: "blue" }}>Translate</Link>
 
       {isLoggedIn && (
         <>
-          <Link to="/profile" style={{ textDecoration: "none", color: "blue" }}>Mój Profil</Link>
+          <Link to="/profile" style={{ textDecoration: "none", color: "blue" }}>Profile</Link>
+          {/* TUTAJ - warunkowo dodajesz link do admin panelu */}
           {user?.role === "admin" && (
             <Link to="/admin" style={{ textDecoration: "none", color: "blue" }}>
               Admin Panel

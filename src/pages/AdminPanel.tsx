@@ -1,9 +1,9 @@
 // src/pages/AdminPanel.tsx
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
-import AddLanguage from "../components/AddLanguage";
-import AddTranslation from "../components/AddTranslation";
 import { Navigate } from "react-router-dom";
+
+// Serwisy do fetch/CRUD
 import {
   getLanguages,
   getTranslations,
@@ -12,28 +12,38 @@ import {
   updateTranslation,
 } from "../services/adminService";
 
-interface Language {
-  _id: string;
-  code: string;
-  name: string;
-  nativeName: string;
-}
+// Komponenty
+import AddLanguage from "../components/AddLanguage";
+import AddTranslation from "../components/AddTranslation";
 
-interface Translation {
-  _id: string;
-  sourceText: string;
-  translatedText: string;
-  sourceLanguage: string;
-  targetLanguage: string;
-}
+// Redux - używamy useDispatch, useSelector
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setLanguages,
+  setTranslations,
+  setEditingTranslation,
+  Language,
+  Translation,
+} from "../store/adminReducer"; // nasz plik z action creators i typami
+
+import "../styles/AdminPanel.css";
 
 const AdminPanel: React.FC = () => {
   const { user, isLoggedIn } = useAuth();
-  const [languages, setLanguages] = useState<Language[]>([]);
-  const [translations, setTranslations] = useState<Translation[]>([]);
-  const [editingTranslation, setEditingTranslation] = useState<Translation | null>(null);
-  const [updatedTranslation, setUpdatedTranslation] = useState<Partial<Translation>>({});
 
+  // Wyciągamy dispatch
+  const dispatch = useDispatch();
+
+  // Wyciągamy stan z store
+  const languages = useSelector((state: any) => state.admin.languages) as Language[];
+  const translations = useSelector((state: any) => state.admin.translations) as Translation[];
+  const editingTranslation = useSelector((state: any) => state.admin.editingTranslation) as Translation | null;
+
+  // Wersja stanu do edycji
+  // (Można by też trzymać w Redux, ale zrobimy sobie lokalny stan, bo to tylko tymczasowe)
+  const [updatedTranslation, setUpdatedTranslation] = React.useState<Partial<Translation>>({});
+
+  // Załaduj dane przy starcie
   useEffect(() => {
     fetchLanguages();
     fetchTranslations();
@@ -42,7 +52,7 @@ const AdminPanel: React.FC = () => {
   const fetchLanguages = async () => {
     try {
       const data = await getLanguages();
-      setLanguages(data);
+      dispatch(setLanguages(data));
     } catch (error) {
       console.error("Błąd podczas pobierania języków:", error);
     }
@@ -51,23 +61,25 @@ const AdminPanel: React.FC = () => {
   const fetchTranslations = async () => {
     try {
       const data = await getTranslations();
-      setTranslations(data);
+      dispatch(setTranslations(data));
     } catch (error) {
       console.error("Błąd podczas pobierania tłumaczeń:", error);
     }
   };
 
+  // Usuwanie języka
   const handleDeleteLanguage = async (id: string) => {
     if (window.confirm("Czy na pewno chcesz usunąć ten język?")) {
       try {
         await deleteLanguage(id);
-        fetchLanguages();
+        fetchLanguages(); 
       } catch (error) {
         console.error("Błąd podczas usuwania języka:", error);
       }
     }
   };
 
+  // Usuwanie tłumaczenia
   const handleDeleteTranslation = async (id: string) => {
     if (window.confirm("Czy na pewno chcesz usunąć to tłumaczenie?")) {
       try {
@@ -79,16 +91,24 @@ const AdminPanel: React.FC = () => {
     }
   };
 
+  // Rozpoczęcie edycji
   const handleEditTranslation = (translation: Translation) => {
-    setEditingTranslation(translation);
+    dispatch(setEditingTranslation(translation));
     setUpdatedTranslation(translation);
   };
 
+  // Anulowanie edycji
+  const handleCancelEdit = () => {
+    dispatch(setEditingTranslation(null));
+    setUpdatedTranslation({});
+  };
+
+  // Zatwierdzenie edycji
   const handleUpdateTranslation = async () => {
     if (editingTranslation) {
       try {
         await updateTranslation(editingTranslation._id, updatedTranslation);
-        setEditingTranslation(null);
+        dispatch(setEditingTranslation(null));
         fetchTranslations();
       } catch (error) {
         console.error("Błąd podczas aktualizacji tłumaczenia:", error);
@@ -101,22 +121,25 @@ const AdminPanel: React.FC = () => {
   }
 
   return (
-    <div style={styles.container}>
-      <h1>Admin Panel</h1>
+    <div className="admin-container">
+      <h1>Admin Panel (Redux)</h1>
 
-      <div style={styles.section}>
+      {/* Dodawanie języka */}
+      <div className="admin-section">
         <h2>Dodaj język</h2>
         <AddLanguage />
       </div>
 
-      <div style={styles.section}>
+      {/* Dodawanie tłumaczenia */}
+      <div className="admin-section">
         <h2>Dodaj tłumaczenie</h2>
         <AddTranslation />
       </div>
 
-      <div style={styles.section}>
+      {/* Lista języków */}
+      <div className="admin-section">
         <h2>Lista języków</h2>
-        <table style={styles.table}>
+        <table className="admin-table">
           <thead>
             <tr>
               <th>Kod</th>
@@ -140,9 +163,10 @@ const AdminPanel: React.FC = () => {
         </table>
       </div>
 
-      <div style={styles.section}>
+      {/* Lista tłumaczeń */}
+      <div className="admin-section">
         <h2>Lista tłumaczeń</h2>
-        <table style={styles.table}>
+        <table className="admin-table">
           <thead>
             <tr>
               <th>Tekst źródłowy</th>
@@ -168,8 +192,9 @@ const AdminPanel: React.FC = () => {
           </tbody>
         </table>
 
+        {/* Formularz edycji */}
         {editingTranslation && (
-          <div style={styles.editForm}>
+          <div className="admin-edit-form">
             <h3>Edytuj tłumaczenie</h3>
             <input
               type="text"
@@ -188,36 +213,12 @@ const AdminPanel: React.FC = () => {
               placeholder="Tłumaczenie"
             />
             <button onClick={handleUpdateTranslation}>Zapisz</button>
-            <button onClick={() => setEditingTranslation(null)}>Anuluj</button>
+            <button onClick={handleCancelEdit}>Anuluj</button>
           </div>
         )}
       </div>
     </div>
   );
-};
-
-const styles: { [key: string]: React.CSSProperties } = {
-  container: {
-    padding: "20px",
-    maxWidth: "900px",
-    margin: "0 auto",
-  },
-  section: {
-    marginBottom: "30px",
-    padding: "20px",
-    border: "1px solid #ccc",
-    borderRadius: "8px",
-  },
-  table: {
-    width: "100%",
-    borderCollapse: "collapse",
-  },
-  editForm: {
-    marginTop: "20px",
-    padding: "10px",
-    border: "1px solid #ccc",
-    borderRadius: "5px",
-  },
 };
 
 export default AdminPanel;

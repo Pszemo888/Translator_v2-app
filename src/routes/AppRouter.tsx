@@ -1,20 +1,30 @@
-// src/routes/AppRouter.tsx
-
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { LoginPage } from "../pages/LoginPage";
 import { RegisterPage } from "../pages/RegisterPage";
 import { PrivateRoute } from "./PrivateRoute";
 import TranslatorPage from "../pages/TranslatorPage";
-import AdminPanel from "../components/AdminPanel";
+import AdminPanel from "../pages/AdminPanel";
 import UserProfile from "../components/UserProfile";
-
-// Importy komponentów lub stron
 import AddLanguagePage from "../pages/AddLanguagePage";
 import AddTranslationPage from "../pages/AddTranslationPage";
 
 export default function AppRouter() {
   return (
     <Routes>
+      {/* 
+        1) Gdy użytkownik wchodzi na "/", chcemy pokazać translator.
+        2) Zakładam, że translator jest chroniony. 
+           Jeśli ma być publiczny, usuń <PrivateRoute>.
+      */}
+      <Route
+        path="/"
+        element={
+          <PrivateRoute>
+            <TranslatorPage />
+          </PrivateRoute>
+        }
+      />
+
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
 
@@ -37,7 +47,17 @@ export default function AppRouter() {
           </PrivateRoute>
         }
       />
-      <Route path="/profile" element={<PrivateRoute><UserProfile /></PrivateRoute>} />
+
+      {/* Profil (chroniony) */}
+      <Route
+        path="/profile"
+        element={
+          <PrivateRoute>
+            <UserProfile />
+          </PrivateRoute>
+        }
+      />
+
       {/* Ścieżka do dodawania tłumaczenia (chroniona) */}
       <Route
         path="/translator/add-translation"
@@ -47,8 +67,9 @@ export default function AppRouter() {
           </PrivateRoute>
         }
       />
-            {/* Panel administratora (wymaga roli admin) */}
-            <Route
+
+      {/* Panel administratora (wymaga roli admin) */}
+      <Route
         path="/admin"
         element={
           <PrivateRoute requiredRole="admin">
@@ -57,8 +78,8 @@ export default function AppRouter() {
         }
       />
 
-      {/* Domyślnie np. przekieruj na /login */}
-      <Route path="*" element={<LoginPage />} />
+      {/* Domyślnie np. przekieruj na "/" (zamiast na login) */}
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }
