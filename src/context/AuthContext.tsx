@@ -1,47 +1,41 @@
 // src/context/AuthContext.tsx
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { getCurrentUser, getToken, logout } from "../services/authService";
-import { User } from "../models/user.models"
+import { User } from "../models/user.models";
 
-/**
- * Typ kontekstu
- */
 interface AuthContextType {
-    user: User | null; // Zmienione z 'any'
-    isLoggedIn: boolean;
-    setUser: React.Dispatch<React.SetStateAction<User | null>>;
-    handleLogout: () => void;
-  }
+  user: User | null;
+  isLoggedIn: boolean;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
+  handleLogout: () => void;
+}
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
   useEffect(() => {
-    // Przy starcie spróbujmy pobrać usera z localStorage
     const storedUser = getCurrentUser();
-    if (storedUser) {
+    const token = getToken();
+
+    if (storedUser && token) {
       setUser(storedUser);
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
     }
   }, []);
-
-  const isLoggedIn = !!getToken();
 
   const handleLogout = () => {
     logout();
     setUser(null);
+    setIsLoggedIn(false);
   };
 
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        isLoggedIn,
-        setUser,
-        handleLogout
-      }}
-    >
+    <AuthContext.Provider value={{ user, isLoggedIn, setUser, handleLogout }}>
       {children}
     </AuthContext.Provider>
   );

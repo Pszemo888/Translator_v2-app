@@ -6,6 +6,7 @@ import { RegisterPage } from "../pages/RegisterPage";
 import { PrivateRoute } from "./PrivateRoute";
 import TranslatorPage from "../pages/TranslatorPage";
 import AdminPanel from "../components/AdminPanel";
+import UserProfile from "../components/UserProfile";
 
 // Importy komponentów lub stron
 import AddLanguagePage from "../pages/AddLanguagePage";
@@ -36,7 +37,7 @@ export default function AppRouter() {
           </PrivateRoute>
         }
       />
-
+      <Route path="/profile" element={<PrivateRoute><UserProfile /></PrivateRoute>} />
       {/* Ścieżka do dodawania tłumaczenia (chroniona) */}
       <Route
         path="/translator/add-translation"

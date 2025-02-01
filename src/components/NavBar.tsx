@@ -1,85 +1,45 @@
 // src/components/NavBar.tsx
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../context/AuthContext"; // Poprawny import AuthContext
+
 const NavBar: React.FC = () => {
-  const { isLoggedIn, handleLogout} = useAuth();
+  // Poprawne pobranie danych z AuthContext
+  const { isLoggedIn, user, handleLogout } = useAuth(); 
   const navigate = useNavigate();
 
   const handleLogoutClick = () => {
-    handleLogout(); 
-    navigate("/"); // Po wylogowaniu przekieruj np. na "/" lub "/login"
+    handleLogout();
+    navigate("/login");
   };
 
   return (
-    <nav style={styles.navbar}>
-      {/* Logo lub nazwa aplikacji */}
-      <div style={styles.logo}>Translator App</div>
+    <nav style={{ display: "flex", gap: "1rem", background: "#eee", padding: "10px" }}>
+      <Link to="/" style={{ textDecoration: "none", color: "blue" }}>Home</Link>
+      <Link to="/translator" style={{ textDecoration: "none", color: "blue" }}>Translator</Link>
 
-      {/* Linki widoczne dla każdego */}
-      <Link to="/" style={styles.link}>
-        Home
-      </Link>
-      {/* {isLoggedIn && user?.role === "admin" && ( */}
-      {isLoggedIn &&(
-        <Link to="/admin" style={styles.link}>Admin Panel</Link>
-      )}
-      {/* Jeśli użytkownik nie jest zalogowany, pokaż link do logowania i rejestracji */}
-      {!isLoggedIn && (
+      {isLoggedIn && (
         <>
-          <Link to="/login" style={styles.link}>
-            Login
-          </Link>
-          <Link to="/register" style={styles.link}>
-            Register
-          </Link>
+          <Link to="/profile" style={{ textDecoration: "none", color: "blue" }}>Mój Profil</Link>
+          {user?.role === "admin" && (
+            <Link to="/admin" style={{ textDecoration: "none", color: "blue" }}>
+              Admin Panel
+            </Link>
+          )}
+          <button onClick={handleLogoutClick} style={{ background: "red", color: "white", border: "none", padding: "5px 10px" }}>
+            Wyloguj
+          </button>
         </>
       )}
 
-      {/* Jeśli użytkownik jest zalogowany, pokaż linki do translatora i przycisk wylogowania */}
-      {isLoggedIn && (
+      {!isLoggedIn && (
         <>
-          <Link to="/translator" style={styles.link}>
-            Translator
-          </Link>
-          <Link to="/translator/add-language" style={styles.link}>
-            Add Language
-          </Link>
-          <Link to="/translator/add-translation" style={styles.link}>
-            Add Translation
-          </Link>
-
-          <button onClick={handleLogoutClick} style={styles.button}>
-            Logout
-          </button>
-
+          <Link to="/login" style={{ textDecoration: "none", color: "blue" }}>Login</Link>
+          <Link to="/register" style={{ textDecoration: "none", color: "blue" }}>Register</Link>
         </>
       )}
     </nav>
   );
-};
-
-const styles: { [key: string]: React.CSSProperties } = {
-  navbar: {
-    display: "flex",
-    alignItems: "center",
-    gap: "1rem",
-    padding: "0.5rem 1rem",
-    background: "#EEE",
-  },
-  logo: {
-    fontWeight: "bold",
-    fontSize: "1.2rem",
-    marginRight: "1rem",
-  },
-  link: {
-    textDecoration: "none",
-    color: "blue",
-    marginRight: "0.5rem",
-  },
-  button: {
-    marginLeft: "0.5rem",
-  },
 };
 
 export default NavBar;
