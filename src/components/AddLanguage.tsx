@@ -1,7 +1,8 @@
+// src/components/AddLanguage.tsx
 import React, { useState } from "react";
-import api from "../services/api";  
-import "../styles/AddForm.css"
-// Definiujemy typ props z callbackiem
+import { addLanguage } from "../services/adminService";  // <-- Zamiast importu api
+import "../styles/AddForm.css";
+
 interface AddLanguageProps {
   onLanguageAdded?: () => void;
 }
@@ -19,19 +20,18 @@ const AddLanguage: React.FC<AddLanguageProps> = ({ onLanguageAdded }) => {
     setSuccess(false);
 
     try {
-      const response = await api.post("/languages", {
+      const response = await addLanguage({
         code: languageCode,
         name: languageName,
-        nativeName: nativeName,
+        nativeName,
       });
+      console.log("Dodano język:", response); 
 
-      console.log("Dodano język:", response.data);
       setSuccess(true);
       setLanguageCode("");
       setLanguageName("");
       setNativeName("");
 
-      // Gdy się uda, informujemy Rodzica (AdminPanel)
       if (onLanguageAdded) {
         onLanguageAdded();
       }

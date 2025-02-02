@@ -1,12 +1,13 @@
+// src/components/AddTranslation.tsx
 import React, { useReducer, useState, FormEvent } from "react";
-import api from "../services/api";
-import "../styles/AddForm.css"
+// Zamiast api importujemy funkcję z serwisu:
+import { addTranslation } from "../services/adminService";
+import "../styles/AddForm.css";
 
 interface AddTranslationProps {
-  onTranslationAdded?: () => void; // callback od rodzica
+  onTranslationAdded?: () => void; 
 }
 
-// Definiujemy stan formularza
 interface FormState {
   sourceText: string;
   translatedText: string;
@@ -49,20 +50,21 @@ const AddTranslation: React.FC<AddTranslationProps> = ({ onTranslationAdded }) =
     setSuccess(false);
 
     try {
-      const response = await api.post("/translations", {
+      // Zamiast api.post wywołujemy funkcję z serwisu:
+      const response = await addTranslation({
         sourceText,
         translatedText,
         sourceLanguage,
         targetLanguage,
       });
 
-      console.log("Dodano tłumaczenie:", response.data);
+      console.log("Dodano tłumaczenie:", response);
       setSuccess(true);
 
-      // Resetujemy formularz
+      // Resetujemy formularz:
       dispatch({ type: "RESET" });
 
-      // Tutaj informujemy rodzica (AdminPanel), że dodano tłumaczenie
+      // Informujemy rodzica (np. AdminPanel), że dodano tłumaczenie:
       if (onTranslationAdded) {
         onTranslationAdded();
       }
