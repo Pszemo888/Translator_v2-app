@@ -43,4 +43,19 @@
     border: 1px solid #ddd;
     border-radius: 4px;
   }
+  .action-buttons {
+    display: flex;
+    gap: 10px; /* Odstęp między przyciskami */
+    margin-top: 5px;
+  }
+  
+  .action-buttons button,
+  .action-buttons a button {  
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
   

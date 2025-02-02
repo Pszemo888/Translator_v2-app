@@ -2,7 +2,7 @@
 import React, { useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { Navigate } from "react-router-dom";
-
+import { Link } from "react-router-dom"; // dodaj import na górze pliku
 // Serwisy do fetch/CRUD
 import {
   getLanguages,
@@ -193,8 +193,14 @@ const AdminPanel: React.FC = () => {
                 <td>{translation.sourceLanguage}</td>
                 <td>{translation.targetLanguage}</td>
                 <td>
+                  <div className="action-buttons">
                   <button onClick={() => handleEditTranslation(translation)}>Edytuj</button>
                   <button onClick={() => handleDeleteTranslation(translation._id)}>Usuń</button>
+                  <Link to={`/translation/${translation._id}`}>
+                  <button>Szczegóły</button>
+                 </Link>
+                  </div>
+
                 </td>
               </tr>
             ))}

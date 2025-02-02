@@ -5,6 +5,8 @@ import { PrivateRoute } from "./PrivateRoute";
 import TranslatorPage from "../pages/TranslatorPage";
 import AdminPanel from "../pages/AdminPanel";
 import UserProfile from "../pages/UserProfile";
+import TranslationDetails from "../pages/TranslationDetails";
+
 export default function AppRouter() {
   return (
     <Routes>
@@ -38,6 +40,14 @@ export default function AppRouter() {
           </PrivateRoute>
         }
       />
+        <Route
+    path="/translation/:id"
+    element={
+      <PrivateRoute>
+        <TranslationDetails />
+      </PrivateRoute>
+    }
+  />
       {/* Domyślnie np. przekieruj na /login */}
       <Route path="*" element={<LoginPage />} />
     </Routes>
