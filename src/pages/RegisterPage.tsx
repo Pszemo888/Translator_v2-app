@@ -6,6 +6,7 @@ import {
   UserRegistrationRequest,
   UserRegistrationResponse,
 } from "../models/user.models";
+import "../styles/authForm.css"
 
 export function RegisterPage() {
   const navigate = useNavigate();
@@ -23,6 +24,10 @@ export function RegisterPage() {
     e.preventDefault();
     setErrorMessage("");
     setSuccessMessage("");
+
+    if (!validateForm()) {
+      return; // jeśli walidacja nie przeszła, przerywamy
+    }
 
     const payload: UserRegistrationRequest = {
       username,
@@ -47,13 +52,34 @@ export function RegisterPage() {
     }
   };
 
+ // Funkcja walidacji - zwraca true / false
+ const validateForm = (): boolean => {
+
+  if (username.trim().length < 3) {
+    setErrorMessage("Username must have at least 3 characters.");
+    return false;
+  }
+
+  if (!email.includes("@") || !email.includes(".")) {
+    setErrorMessage("Email musi zawierać znak @ i domenę (np. .pl, .com).");
+    return false;
+  }
+
+  if (password.length < 6) {
+    setErrorMessage("Password must be at least 6 characters long.");
+    return false;
+  }
+
+  return true; // jeśli wszystko ok, zwracamy true
+};
+
+
   return (
-    <div className="card">
-      <h2>Register</h2>
-      <form onSubmit={handleRegister}>
-        <div>
+    <div className="auth-card">
+      <h2>Rejestracja</h2>
+      <form className="auth-form" onSubmit={handleRegister}>
+        <div className="form-group">
           <label htmlFor="username">Username</label>
-          <br />
           <input
             id="username"
             type="text"
@@ -63,9 +89,8 @@ export function RegisterPage() {
           />
         </div>
 
-        <div>
+        <div className="form-group">
           <label htmlFor="email">Email</label>
-          <br />
           <input
             id="email"
             type="email"
@@ -75,15 +100,13 @@ export function RegisterPage() {
           />
         </div>
 
-        <div>
+        <div className="form-group">
           <label htmlFor="password">Password</label>
-          <br />
           <input
             id="password"
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            // ewentualnie walidacje
             required
           />
         </div>
@@ -91,7 +114,7 @@ export function RegisterPage() {
         {successMessage && <div className="success">{successMessage}</div>}
         {errorMessage && <div className="error">{errorMessage}</div>}
 
-        <button type="submit">Register</button>
+        <button type="submit">Zarejestruj</button>
       </form>
     </div>
   );

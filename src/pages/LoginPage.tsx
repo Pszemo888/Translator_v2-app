@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { loginUser, saveToken, saveCurrentUser } from "../services/authService";
 import { useAuth } from "../context/AuthContext";
 import { AxiosError } from "axios";
-
+import "../styles/authForm.css"
 
 export  function LoginPage() {
   const navigate = useNavigate();
@@ -56,13 +56,12 @@ export  function LoginPage() {
     }
   };
 
-  return (
-    <div className="card">
+ return (
+    <div className="auth-card">
       <h2>Logowanie</h2>
-      <form onSubmit={handleLogin}>
-        <div>
+      <form className="auth-form" onSubmit={handleLogin}>
+        <div className="form-group">
           <label htmlFor="email">Email</label>
-          <br />
           <input
             id="email"
             type="email"
@@ -72,9 +71,8 @@ export  function LoginPage() {
           />
         </div>
 
-        <div>
+        <div className="form-group">
           <label htmlFor="password">Hasło</label>
-          <br />
           <input
             id="password"
             type="password"
