@@ -9,31 +9,26 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); 
 }
 
-/* Nagłówek strony profilowej */
 .profile-title {
   text-align: center;
   font-size: 2rem;
   font-weight: bold;
-  color: #a855f7; /* fioletowy akcent */
+  color: #a855f7; 
   margin-bottom: 1.5rem;
 }
 
-/* Sekcja z danymi użytkownika */
 .profile-section {
   margin-bottom: 1.5rem;
   padding: 1.5rem;
   border: 1px solid #333;
   border-radius: 8px;
-  background-color: #2c2c2c; /* nieco jaśniejsze tło od kontenera */
-}
+  background-color: #2c2c2c; 
 
-/* Tekst w sekcji profilu */
 .profile-section p {
   margin: 0.4rem 0;
   font-size: 1rem;
 }
 
-/* Tytuły podsekcji (np. "Twoje tłumaczenia") */
 .section-title {
   font-size: 1.5rem;
   font-weight: bold;
@@ -41,19 +36,16 @@
   margin-bottom: 1rem;
 }
 
-/* Dodatkowa sekcja (np. lista tłumaczeń) */
 .section {
   margin-bottom: 1.5rem;
 }
 
-/* Lista tłumaczeń */
 .list {
   list-style-type: none;
   padding: 0;
   margin: 0;
 }
 
-/* Pojedynczy element listy */
 .list-item {
   padding: 0.6rem 0;
   border-bottom: 1px solid #333;
@@ -61,13 +53,11 @@
   font-size: 1rem;
 }
 
-/* Wyróżnienie oryginału */
 .list-item strong {
   color: #ffffff;
   margin-right: 0.5rem;
 }
 
-/* Przycisk wylogowania */
 .logout-button {
   display: block; 
   margin: 1.5rem auto 0; 
@@ -82,7 +72,6 @@
   text-align: center;
 }
 
-/* Efekt hover dla przycisku */
 .logout-button:hover {
   background-color: #7e22ce; 
 }

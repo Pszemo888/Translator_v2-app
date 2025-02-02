@@ -20,7 +20,7 @@
   
   /* Przycisk wylogowania */
   .navbar-button {
-    background-color: #dc2626; /* czerwony odcień */
+    background-color: #471c3d; /* czerwony odcień */
     color: #ffffff;
     border: none;
     border-radius: 5px;
@@ -29,9 +29,7 @@
     transition: background-color 0.3s;
   }
   
-  .navbar-button:hover {
-    background-color: #b91c1c; /* ciemniejszy czerwony na hover */
-  }
+
   
   /* Opcjonalnie można wyróżnić loginy/rejestry inaczej */
   .navbar-button-secondary {

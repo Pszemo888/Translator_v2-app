@@ -131,8 +131,6 @@ const AdminPanel: React.FC = () => {
 
   return (
     <div className="admin-container">
-      <h1>Admin Panel (Redux)</h1>
-
       {/* Dodawanie języka */}
       <div className="admin-section">
         {/* PRZEKAZUJEMY CALLBACK handleLanguageAdded */}
