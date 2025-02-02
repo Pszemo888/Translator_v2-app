@@ -24,31 +24,29 @@ import {
   setEditingTranslation,
   Language,
   Translation,
-} from "../store/adminReducer"; // nasz plik z action creators i typami
+} from "../store/adminReducer";
 
 import "../styles/AdminPanel.css";
 
 const AdminPanel: React.FC = () => {
   const { user, isLoggedIn } = useAuth();
 
-  // Wyciągamy dispatch
   const dispatch = useDispatch();
 
-  // Wyciągamy stan z store
+  // Pobieramy stan z Redux
   const languages = useSelector((state: any) => state.admin.languages) as Language[];
   const translations = useSelector((state: any) => state.admin.translations) as Translation[];
   const editingTranslation = useSelector((state: any) => state.admin.editingTranslation) as Translation | null;
 
-  // Wersja stanu do edycji
-  // (Można by też trzymać w Redux, ale zrobimy sobie lokalny stan, bo to tylko tymczasowe)
+  // Lokalne przechowywanie edytowanej translacji
   const [updatedTranslation, setUpdatedTranslation] = React.useState<Partial<Translation>>({});
 
-  // Załaduj dane przy starcie
   useEffect(() => {
     fetchLanguages();
     fetchTranslations();
   }, []);
 
+  // Funkcja pobiera języki z API -> zapisuje w Redux
   const fetchLanguages = async () => {
     try {
       const data = await getLanguages();
@@ -58,6 +56,7 @@ const AdminPanel: React.FC = () => {
     }
   };
 
+  // Funkcja pobiera tłumaczenia z API -> zapisuje w Redux
   const fetchTranslations = async () => {
     try {
       const data = await getTranslations();
@@ -116,6 +115,16 @@ const AdminPanel: React.FC = () => {
     }
   };
 
+  // CALLBACK: gdy dziecko AddLanguage doda język -> odśwież listę
+  const handleLanguageAdded = () => {
+    fetchLanguages(); // Po dodaniu języka ponownie pobieramy listę języków
+  };
+
+  // CALLBACK: gdy dziecko AddTranslation doda tłumaczenie -> odśwież listę
+  const handleTranslationAdded = () => {
+    fetchTranslations();
+  };
+
   if (!isLoggedIn || user?.role !== "admin") {
     return <Navigate to="/login" replace />;
   }
@@ -126,14 +135,14 @@ const AdminPanel: React.FC = () => {
 
       {/* Dodawanie języka */}
       <div className="admin-section">
-        <h2>Dodaj język</h2>
-        <AddLanguage />
+        {/* PRZEKAZUJEMY CALLBACK handleLanguageAdded */}
+        <AddLanguage onLanguageAdded={handleLanguageAdded} />
       </div>
 
       {/* Dodawanie tłumaczenia */}
       <div className="admin-section">
-        <h2>Dodaj tłumaczenie</h2>
-        <AddTranslation />
+        {/* PRZEKAZUJEMY CALLBACK handleTranslationAdded */}
+        <AddTranslation onTranslationAdded={handleTranslationAdded} />
       </div>
 
       {/* Lista języków */}

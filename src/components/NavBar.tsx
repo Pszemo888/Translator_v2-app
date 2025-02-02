@@ -15,7 +15,7 @@ const NavBar: React.FC = () => {
 
   return (
     <nav style={{ display: "flex", gap: "1rem", background: "#eee", padding: "10px" }}>
-      <Link to="/" style={{ textDecoration: "none", color: "blue" }}>Home</Link>
+     
       <Link to="/translator" style={{ textDecoration: "none", color: "blue" }}>Translate</Link>
 
       {isLoggedIn && (

@@ -1,7 +1,13 @@
+// src/components/AddLanguage.tsx
 import React, { useState } from "react";
-import api from "../services/api";  // Import instancji axios
+import api from "../services/api";  
+import "../styles/AddForm.css"
+// Definiujemy typ props z callbackiem
+interface AddLanguageProps {
+  onLanguageAdded?: () => void;
+}
 
-const AddLanguage: React.FC = () => {
+const AddLanguage: React.FC<AddLanguageProps> = ({ onLanguageAdded }) => {
   const [languageCode, setLanguageCode] = useState("");
   const [languageName, setLanguageName] = useState("");
   const [nativeName, setNativeName] = useState("");
@@ -10,7 +16,7 @@ const AddLanguage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError(null); // Reset błędu
+    setError(null);
     setSuccess(false);
 
     try {
@@ -25,6 +31,11 @@ const AddLanguage: React.FC = () => {
       setLanguageCode("");
       setLanguageName("");
       setNativeName("");
+
+      // Gdy się uda, informujemy Rodzica (AdminPanel)
+      if (onLanguageAdded) {
+        onLanguageAdded();
+      }
     } catch (err: any) {
       console.error("Błąd w trakcie dodawania języka:", err);
       setError(err.response?.data?.message || "Wystąpił błąd.");
@@ -32,10 +43,10 @@ const AddLanguage: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="add-form-container">
       <h2>Dodaj język</h2>
       <form onSubmit={handleSubmit}>
-        <div>
+        <div className="form-group">
           <label>Kod języka:</label>
           <input
             type="text"
@@ -44,7 +55,7 @@ const AddLanguage: React.FC = () => {
             required
           />
         </div>
-        <div>
+        <div className="form-group">
           <label>Nazwa języka:</label>
           <input
             type="text"
@@ -53,7 +64,7 @@ const AddLanguage: React.FC = () => {
             required
           />
         </div>
-        <div>
+        <div className="form-group">
           <label>Natywna nazwa:</label>
           <input
             type="text"
@@ -65,8 +76,8 @@ const AddLanguage: React.FC = () => {
         <button type="submit">Dodaj język</button>
       </form>
 
-      {success && <p style={{ color: "green" }}>Język dodany pomyślnie!</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {success && <p className="success-message">Język dodany pomyślnie!</p>}
+      {error && <p className="error-message">{error}</p>}
     </div>
   );
 };

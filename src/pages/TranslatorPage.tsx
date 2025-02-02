@@ -47,17 +47,17 @@ export default function TranslatorPage() {
   return (
     <div className="translator-page">
       <div className="translator-container">
-        <h2 className="translator-header">Translate text</h2>
+        <h2 className="translator-header">Tłumacz tekst</h2>
         <form onSubmit={handleTranslate} className="translator-form">
           <div className="language-selector">
             <div className="language-group">
-              <label className="form-label">Source Language</label>
+              <label className="form-label">Język źródłowy</label>
               <select
                 className="form-select"
                 value={sourceLanguage}
                 onChange={(e) => setSourceLanguage(e.target.value)}
               >
-                <option value="">Language</option>
+                <option value="">Język</option>
                 {languages.map((lang) => (
                   <option key={lang.code} value={lang.code}>
                     {lang.name}
@@ -69,7 +69,7 @@ export default function TranslatorPage() {
                 rows={6}
                 value={sourceText}
                 onChange={(e) => setSourceText(e.target.value)}
-                placeholder="Type text to translate"
+                placeholder="Napisz tekst do przetłumaczenia"
               />
             </div>
             <div className="swap-button-container">
@@ -87,13 +87,13 @@ export default function TranslatorPage() {
               </button>
             </div>
             <div className="language-group">
-              <label className="form-label">Target Language</label>
+              <label className="form-label">Język docelowy</label>
               <select
                 className="form-select"
                 value={targetLanguage}
                 onChange={(e) => setTargetLanguage(e.target.value)}
               >
-                <option value="">Language</option>
+                <option value="">Język</option>
                 {languages.map((lang) => (
                   <option key={lang.code} value={lang.code}>
                     {lang.name}
@@ -105,7 +105,7 @@ export default function TranslatorPage() {
                 rows={6}
                 value={translatedText}
                 readOnly
-                placeholder="Translation will appear here"
+                placeholder="Tłumaczenie pojawi się tutaj"
               />
             </div>
           </div>
