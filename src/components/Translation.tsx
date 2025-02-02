@@ -1,4 +1,3 @@
-// src/services/translationService.ts
 import api from "../services/api";
 
 export interface TranslationRequest {

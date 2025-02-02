@@ -1,9 +1,7 @@
-// src/pages/UserProfile.tsx
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { getUserProfile } from "../services/userService";
 import { Navigate } from "react-router-dom";
-// Import pliku CSS
 import "../styles/UserProfile.css";
 
 interface Translation {
@@ -80,7 +78,6 @@ const UserProfile: React.FC = () => {
         )}
       </div>
 
-      {/* Przycisk wylogowania */}
       <button onClick={handleLogout} className="logout-button">
         Wyloguj się
       </button>

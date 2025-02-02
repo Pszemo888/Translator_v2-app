@@ -23,9 +23,6 @@ export async function loginUser(
   return response.data;
 }
 
-/**
- * Pomocnicze metody do obsługi localStorage
- */
 export function saveToken(token: string) {
   localStorage.setItem("authToken", token);
 }

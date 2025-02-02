@@ -1,9 +1,7 @@
-// src/pages/AdminPanel.tsx
 import React, { useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { Navigate } from "react-router-dom";
-import { Link } from "react-router-dom"; // dodaj import na górze pliku
-// Serwisy do fetch/CRUD
+import { Link } from "react-router-dom";
 import {
   getLanguages,
   getTranslations,
@@ -12,11 +10,9 @@ import {
   updateTranslation,
 } from "../services/adminService";
 
-// Komponenty
 import AddLanguage from "../components/AddLanguage";
 import AddTranslation from "../components/AddTranslation";
 
-// Redux - używamy useDispatch, useSelector
 import { useDispatch, useSelector } from "react-redux";
 import {
   setLanguages,

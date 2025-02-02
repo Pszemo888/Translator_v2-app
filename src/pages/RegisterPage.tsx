@@ -1,4 +1,3 @@
-// src/pages/RegisterPage.tsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../services/authService";
@@ -11,12 +10,10 @@ import "../styles/authForm.css"
 export function RegisterPage() {
   const navigate = useNavigate();
 
-  // Stan formularza
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  
-  // Komunikaty
+
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -26,7 +23,7 @@ export function RegisterPage() {
     setSuccessMessage("");
 
     if (!validateForm()) {
-      return; // jeśli walidacja nie przeszła, przerywamy
+      return;
     }
 
     const payload: UserRegistrationRequest = {
@@ -36,13 +33,10 @@ export function RegisterPage() {
     };
 
     try {
-      // Wywołanie API
       const response: UserRegistrationResponse = await registerUser(payload);
-      // W Angularze dostawałeś { id, username, email }
       console.log("Response from server:", response);
 
       setSuccessMessage("Registration successful!");
-      // Opcjonalnie przekieruj na login po 2s (jak w Angularze):
       setTimeout(() => {
         navigate("/login");
       }, 2000);
@@ -52,7 +46,6 @@ export function RegisterPage() {
     }
   };
 
- // Funkcja walidacji - zwraca true / false
  const validateForm = (): boolean => {
 
   if (username.trim().length < 3) {
@@ -70,7 +63,7 @@ export function RegisterPage() {
     return false;
   }
 
-  return true; // jeśli wszystko ok, zwracamy true
+  return true;
 };
 
 

@@ -1,4 +1,3 @@
-// src/components/AddTranslation.tsx
 import React, { useReducer, useState, FormEvent } from "react";
 import api from "../services/api";
 import "../styles/AddForm.css"

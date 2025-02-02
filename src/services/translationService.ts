@@ -1,4 +1,3 @@
-// src/services/translationService.ts
 import api from "./api";
 
 export interface LanguageResponse {

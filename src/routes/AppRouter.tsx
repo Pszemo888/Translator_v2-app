@@ -12,18 +12,7 @@ export default function AppRouter() {
     <Routes>
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
-
-      {/* Główna ścieżka translatora (chroniona) */}
-      <Route
-        path="/translator"
-        element={
-          <PrivateRoute>
-            <TranslatorPage />
-          </PrivateRoute>
-        }
-      />
-
-      {/* Panel admina (chroniony + wymagana rola) */}
+      <Route path="/translator" element={<TranslatorPage />} />
       <Route
         path="/admin"
         element={
@@ -40,14 +29,14 @@ export default function AppRouter() {
           </PrivateRoute>
         }
       />
-        <Route
-    path="/translation/:id"
-    element={
-      <PrivateRoute>
-        <TranslationDetails />
-      </PrivateRoute>
-    }
-  />
+      <Route
+        path="/translation/:id"
+        element={
+          <PrivateRoute>
+            <TranslationDetails />
+          </PrivateRoute>
+        }
+      />
       {/* Domyślnie np. przekieruj na /login */}
       <Route path="*" element={<LoginPage />} />
     </Routes>

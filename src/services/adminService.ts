@@ -1,4 +1,3 @@
-// src/services/adminService.ts
 import api from "./api";
 
 // Pobieranie wszystkich języków

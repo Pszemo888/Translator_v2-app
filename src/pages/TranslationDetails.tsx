@@ -8,7 +8,7 @@ interface Translation {
   translatedText: string;
   sourceLanguage: string;
   targetLanguage: string;
-  createdAt: string; // Dodano pole createdAt
+  createdAt: string;
 }
 
 const TranslationDetails: React.FC = () => {

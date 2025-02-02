@@ -1,4 +1,3 @@
-// src/pages/LoginPage.tsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser, saveToken, saveCurrentUser } from "../services/authService";
@@ -8,13 +7,12 @@ import "../styles/authForm.css"
 
 export  function LoginPage() {
   const navigate = useNavigate();
-  const { setUser, isLoggedIn } = useAuth(); // Add isLoggedIn check
+  const { setUser, isLoggedIn } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  // Redirect if already logged in
   React.useEffect(() => {
     if (isLoggedIn) {
       navigate("/translator");
@@ -28,12 +26,10 @@ export  function LoginPage() {
     try {
       const response = await loginUser({ email, password });
       
-      // Save auth data
       saveToken(response.token);
       saveCurrentUser(response.user);
       setUser(response.user);
       window.location.href = response.user.role === 'admin' ? '/admin' : '/translator';
-      // Redirect based on role
       if (response.user.role === 'admin') {
         navigate("/admin");
       } else {

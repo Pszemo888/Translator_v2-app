@@ -1,7 +1,7 @@
 import { BrowserRouter } from "react-router-dom";
 import AppRouter from "./routes/AppRouter";
 import { AuthProvider } from "./context/AuthContext";
-import NavBar from "./components/NavBar";
+import NavBar from "./components/NavBar"; // import NavBar
 import store from "./store";
 import { Provider } from "react-redux";
 
@@ -10,7 +10,8 @@ function App() {
     <BrowserRouter>
       <AuthProvider>
         <Provider store={store}>
-          <NavBar />       
+          <NavBar />
+          
           <AppRouter />
         </Provider>
       </AuthProvider>
