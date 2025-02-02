@@ -1,0 +1,48 @@
+.navbar {
+    display: flex;
+    gap: 1rem;
+    background-color: #1f1f1f; /* ciemne tło */
+    padding: 10px;
+    align-items: center;       /* wyrównanie w pionie */
+  }
+  
+  /* Wygląd linków */
+  .navbar-link {
+    text-decoration: none;
+    color: #a182de;            /* fioletowe linki */
+    font-weight: 500;
+    transition: color 0.3s;
+  }
+  
+  .navbar-link:hover {
+    color: #c8b2ee;            /* jaśniejszy fiolet przy najechaniu */
+  }
+  
+  /* Przycisk wylogowania */
+  .navbar-button {
+    background-color: #dc2626; /* czerwony odcień */
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .navbar-button:hover {
+    background-color: #b91c1c; /* ciemniejszy czerwony na hover */
+  }
+  
+  /* Opcjonalnie można wyróżnić loginy/rejestry inaczej */
+  .navbar-button-secondary {
+    background-color: #a182de;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    transition: background-color 0.3s;
+  }
+  
+  .navbar-button-secondary:hover {
+    background-color: #8f69c4;
+  }
+  

@@ -1,11 +1,11 @@
-// src/components/NavBar.tsx
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext"; // Poprawny import AuthContext
+import { useAuth } from "../context/AuthContext";
+
+import "../styles/NavBar.css"; 
 
 const NavBar: React.FC = () => {
-  // Poprawne pobranie danych z AuthContext
-  const { isLoggedIn, user, handleLogout } = useAuth(); 
+  const { isLoggedIn, user, handleLogout } = useAuth();
   const navigate = useNavigate();
 
   const handleLogoutClick = () => {
@@ -14,20 +14,25 @@ const NavBar: React.FC = () => {
   };
 
   return (
-    <nav style={{ display: "flex", gap: "1rem", background: "#eee", padding: "10px" }}>
-     
-      <Link to="/translator" style={{ textDecoration: "none", color: "blue" }}>Translate</Link>
+    <nav className="navbar">
+      <Link to="/translator" className="navbar-link">
+        Translate
+      </Link>
 
       {isLoggedIn && (
         <>
-          <Link to="/profile" style={{ textDecoration: "none", color: "blue" }}>Profile</Link>
-          {/* TUTAJ - warunkowo dodajesz link do admin panelu */}
+          <Link to="/profile" className="navbar-link">
+            Profile
+          </Link>
           {user?.role === "admin" && (
-            <Link to="/admin" style={{ textDecoration: "none", color: "blue" }}>
+            <Link to="/admin" className="navbar-link">
               Admin Panel
             </Link>
           )}
-          <button onClick={handleLogoutClick} style={{ background: "red", color: "white", border: "none", padding: "5px 10px" }}>
+          <button
+            onClick={handleLogoutClick}
+            className="navbar-button"
+          >
             Wyloguj
           </button>
         </>
@@ -35,8 +40,12 @@ const NavBar: React.FC = () => {
 
       {!isLoggedIn && (
         <>
-          <Link to="/login" style={{ textDecoration: "none", color: "blue" }}>Login</Link>
-          <Link to="/register" style={{ textDecoration: "none", color: "blue" }}>Register</Link>
+          <Link to="/login" className="navbar-link">
+            Login
+          </Link>
+          <Link to="/register" className="navbar-link">
+            Register
+          </Link>
         </>
       )}
     </nav>
