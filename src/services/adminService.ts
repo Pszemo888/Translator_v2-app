@@ -46,3 +46,8 @@ export const updateTranslation = async (id: string, updatedData: Partial<any>) =
   const response = await api.put(`/translations/${id}`, updatedData);
   return response.data;
 };
+// Pobranie tłumaczenia po ID
+export const getTranslationById = async (id: string) => {
+  const response = await api.get(`/translations/${id}`);
+  return response.data;
+};
